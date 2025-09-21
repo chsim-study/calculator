@@ -12,8 +12,12 @@ class Main(QMainWindow):
         self.setWindowTitle("Calculator")
 
         self.left = None 
+        self.cal = ""
 
         self.btn_sum.clicked.connect(self.cal_sum)
+        self.btn_sub.clicked.connect(self.cal_sub)
+        self.btn_mul.clicked.connect(self.cal_mul)
+        self.btn_div.clicked.connect(self.cal_div)
         self.btn_equal.clicked.connect(self.cal_equal)
         num_buttons = [
             self.btn_num0, self.btn_num1, self.btn_num2, self.btn_num3, self.btn_num4,
@@ -34,6 +38,22 @@ class Main(QMainWindow):
     def cal_sum(self):
         self.left = self._read_input()
         self.edit_result.clear()
+        self.cal = "sum"
+    
+    def cal_sub(self):
+        self.left = self._read_input()
+        self.edit_result.clear()
+        self.cal = "sub"
+    
+    def cal_mul(self):
+        self.left = self._read_input()
+        self.edit_result.clear()
+        self.cal = "mul"
+    
+    def cal_div(self):
+        self.left = self._read_input()
+        self.edit_result.clear()
+        self.cal = "div"
 
     def cal_equal(self):
         right = self._read_input()
@@ -41,7 +61,14 @@ class Main(QMainWindow):
             left = self.left    
         else:
             left = 0
-        result = Calculator.sum(left, right)
+        if self.cal == "sum":
+            result = Calculator.sum(left, right)
+        elif self.cal == "sub":
+            result = Calculator.sub(left, right)
+        elif self.cal == "mul":
+            result = Calculator.mul(left, right)
+        elif self.cal == "div":
+            result = Calculator.div(left, right)
         self.edit_result.setText(str(result))
         self.left = None
 
