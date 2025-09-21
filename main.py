@@ -18,21 +18,38 @@ class Main(QMainWindow):
         self.btn_sub.clicked.connect(self.cal_sub)
         self.btn_mul.clicked.connect(self.cal_mul)
         self.btn_div.clicked.connect(self.cal_div)
+        self.btn_mod.clicked.connect(self.cal_mod)
         self.btn_equal.clicked.connect(self.cal_equal)
+        self.btn_clear.clicked.connect(self.clear_all)
+        self.btn_com.clicked.connect(self.add_com)
+        self.btn_neg.clicked.connect(self.change_sign)
         num_buttons = [
             self.btn_num0, self.btn_num1, self.btn_num2, self.btn_num3, self.btn_num4,
             self.btn_num5, self.btn_num6, self.btn_num7, self.btn_num8, self.btn_num9
         ]
         for i, btn in enumerate(num_buttons):
             btn.clicked.connect(lambda _, x=i: self.add_num(str(x)))
+    
+    def change_sign(self):
+        value = self._read_input()
+        value = -1 * value
+        self.edit_result.setText(str(value))
+    
+    def clear_all(self):
+        self.edit_result.clear()
+        self.left = None
+        self.cal = ""
+
+    def add_com(self):
+        self.edit_result.setText(self.edit_result.text() + ".")
 
     def add_num(self, num: str):
         self.edit_result.setText(self.edit_result.text() + num)
 
-    def _read_input(self) -> int:
+    def _read_input(self) -> float:
         text = self.edit_result.text().strip()
         if text:
-            return int(text)
+            return float(text)
         return 0
 
     def cal_sum(self):
@@ -54,6 +71,11 @@ class Main(QMainWindow):
         self.left = self._read_input()
         self.edit_result.clear()
         self.cal = "div"
+    
+    def cal_mod(self):
+        self.left = self._read_input()
+        self.edit_result.clear()
+        self.cal = "mod"
 
     def cal_equal(self):
         right = self._read_input()
@@ -69,6 +91,8 @@ class Main(QMainWindow):
             result = Calculator.mul(left, right)
         elif self.cal == "div":
             result = Calculator.div(left, right)
+        elif self.cal == "mod":
+            result = Calculator.mod(left, right)
         self.edit_result.setText(str(result))
         self.left = None
 

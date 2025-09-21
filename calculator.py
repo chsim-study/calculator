@@ -12,3 +12,8 @@ class Calculator:
         if b != 0:
             return a / b
         return None
+    
+    def mod(a, b):
+        if b != 0:
+            return a % b
+        return None
