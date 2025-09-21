@@ -1,6 +1,7 @@
 from calculator import Calculator
 
 from PyQt5 import uic
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys
 
@@ -29,6 +30,8 @@ class Main(QMainWindow):
         ]
         for i, btn in enumerate(num_buttons):
             btn.clicked.connect(lambda _, x=i: self.add_num(str(x)))
+        
+        self.edit_result.setReadOnly(True)
     
     def change_sign(self):
         value = self._read_input()
@@ -95,6 +98,42 @@ class Main(QMainWindow):
             result = Calculator.mod(left, right)
         self.edit_result.setText(str(result))
         self.left = None
+    
+    def keyPressEvent(self, event):
+        key = event.key()
+        text = event.text()
+
+        if key == Qt.Key_Backspace:
+            self.edit_result.backspace()
+            return
+
+        if key in (Qt.Key_Return, Qt.Key_Enter):
+            self.cal_equal()
+            return
+
+        if text.isdigit():
+            self.add_num(text)
+            return
+
+        if text == ".":
+            self.add_com()
+            return
+
+        if text == "+":
+            self.cal_sum()
+            return
+        elif text == "-":
+            self.cal_sub()
+            return
+        elif text == "*":
+            self.cal_mul()
+            return
+        elif text == "/":
+            self.cal_div()
+            return
+        elif text == "%":
+            self.cal_mod()
+            return
 
 
 if __name__ == "__main__":
