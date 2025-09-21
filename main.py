@@ -44,7 +44,8 @@ class Main(QMainWindow):
         self.cal = ""
 
     def add_com(self):
-        self.edit_result.setText(self.edit_result.text() + ".")
+        if not self.edit_result.text().count("."):
+            self.edit_result.setText(self.edit_result.text() + ".")
 
     def add_num(self, num: str):
         self.edit_result.setText(self.edit_result.text() + num)
@@ -86,16 +87,20 @@ class Main(QMainWindow):
             left = self.left    
         else:
             left = 0
-        if self.cal == "sum":
-            result = Calculator.sum(left, right)
-        elif self.cal == "sub":
-            result = Calculator.sub(left, right)
-        elif self.cal == "mul":
-            result = Calculator.mul(left, right)
-        elif self.cal == "div":
-            result = Calculator.div(left, right)
-        elif self.cal == "mod":
-            result = Calculator.mod(left, right)
+
+        if self.cal in ["sum", "sub", "mul", "div", "mod"]:
+            if self.cal == "sum":
+                result = Calculator.sum(left, right)
+            elif self.cal == "sub":
+                result = Calculator.sub(left, right)
+            elif self.cal == "div":
+                result = Calculator.div(left, right)
+            elif self.cal == "mul":
+                result = Calculator.mul(left, right)
+            elif self.cal == "mod":
+                result = Calculator.mod(left, right)
+            else:
+                result = right
         self.edit_result.setText(str(result))
         self.left = None
     
@@ -116,23 +121,20 @@ class Main(QMainWindow):
             return
 
         if text == ".":
-            self.add_com()
-            return
-
-        if text == "+":
-            self.cal_sum()
-            return
-        elif text == "-":
-            self.cal_sub()
-            return
-        elif text == "*":
-            self.cal_mul()
-            return
-        elif text == "/":
-            self.cal_div()
-            return
-        elif text == "%":
-            self.cal_mod()
+            if not self.edit_result.text().count("."):
+                self.add_com()
+                return
+        if text in {"+", "-", "*", "/", "%"}:
+            if text == "+":
+                self.cal_sum()
+            elif text == "-":
+                self.cal_sub()
+            elif text == "*":
+                self.cal_mul()
+            elif text == "/":
+                self.cal_div()
+            elif text == "%":
+                self.cal_mod()
             return
 
 
